@@ -1,4 +1,3 @@
-```tsx
 "use client";
 
 import { useState } from "react";
@@ -6,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 
 export default function SettingsPage() {
@@ -34,7 +34,7 @@ export default function SettingsPage() {
         throw new Error(data.error || "Failed to update email");
       }
 
-      setSuccess("Email updated successfully");
+      setSuccess("Email updated. Please check your new address to re-verify.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     }
@@ -49,10 +49,10 @@ export default function SettingsPage() {
       const response = await fetch("/api/account", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          type: "password", 
+        body: JSON.stringify({
+          type: "password",
           value: newPassword,
-          currentPassword
+          currentPassword,
         }),
       });
 
@@ -95,25 +95,25 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       <main className="container mx-auto px-4 py-8 max-w-3xl">
         <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
-        
+
         {error && (
           <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-md">
             {error}
           </div>
         )}
-        
+
         {success && (
           <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-md">
             {success}
           </div>
         )}
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Email Update */}
-          <Card className="p-6">
+          <Card>
             <CardHeader>
               <CardTitle>Update Email</CardTitle>
             </CardHeader>
@@ -133,9 +133,9 @@ export default function SettingsPage() {
               </form>
             </CardContent>
           </Card>
-          
+
           {/* Password Update */}
-          <Card className="p-6">
+          <Card>
             <CardHeader>
               <CardTitle>Change Password</CardTitle>
             </CardHeader>
@@ -167,9 +167,9 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
         </div>
-        
+
         {/* Delete Account */}
-        <Card className="mt-8 p-6">
+        <Card className="mt-8">
           <CardHeader>
             <CardTitle>Delete Account</CardTitle>
           </CardHeader>
@@ -187,4 +187,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-```

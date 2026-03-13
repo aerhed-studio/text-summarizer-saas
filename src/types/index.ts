@@ -1,4 +1,3 @@
-```ts
 export interface AnalysisResult {
   summary: string;
   keywords: string[];
@@ -14,4 +13,3 @@ export interface HistoryEntry {
   keywords: string[];
   createdAt: string;
 }
-```

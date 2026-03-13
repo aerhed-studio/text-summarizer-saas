@@ -1,4 +1,3 @@
-```tsx
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,12 +15,12 @@ export default function HistoryList({ entries, onDelete }: HistoryListProps) {
 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
-    
+
     try {
       const response = await fetch(`/api/history/${id}`, {
         method: "DELETE",
       });
-      
+
       if (response.ok) {
         onDelete(id);
       } else {
@@ -59,7 +58,7 @@ export default function HistoryList({ entries, onDelete }: HistoryListProps) {
                   <p>{new Date(entry.createdAt).toLocaleDateString()}</p>
                 </div>
               </div>
-              
+
               <div className="mt-4 flex flex-wrap gap-2">
                 {entry.keywords.slice(0, 5).map((keyword, index) => (
                   <span key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
@@ -67,7 +66,7 @@ export default function HistoryList({ entries, onDelete }: HistoryListProps) {
                   </span>
                 ))}
               </div>
-              
+
               <div className="mt-4 flex justify-end">
                 <Button
                   variant="destructive"
@@ -85,4 +84,3 @@ export default function HistoryList({ entries, onDelete }: HistoryListProps) {
     </div>
   );
 }
-```

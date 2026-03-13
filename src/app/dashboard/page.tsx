@@ -1,11 +1,10 @@
-```tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import HistoryList from "@/components/HistoryList";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function DashboardPage() {
   const [history, setHistory] = useState<any[]>([]);
@@ -23,11 +22,11 @@ export default function DashboardPage() {
     try {
       setLoading(true);
       const response = await fetch(`/api/history?page=${page}&limit=${limit}`);
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch history");
       }
-      
+
       const data = await response.json();
       setHistory(data.data);
       setTotal(data.total);
@@ -47,7 +46,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Analysis History</h1>
@@ -55,7 +54,7 @@ export default function DashboardPage() {
             <a href="/">New Analysis</a>
           </Button>
         </div>
-        
+
         {error && (
           <Card className="mb-6">
             <CardContent className="p-4 text-red-600">
@@ -63,13 +62,13 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         )}
-        
+
         {loading ? (
           <div className="text-center py-8">Loading history...</div>
         ) : (
           <>
             <HistoryList entries={history} onDelete={handleDelete} />
-            
+
             {total > limit && (
               <div className="flex justify-center mt-6 space-x-2">
                 <Button
@@ -97,4 +96,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-```

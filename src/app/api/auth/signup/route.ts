@@ -1,4 +1,3 @@
-```ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -8,7 +7,7 @@ import { sendVerificationEmail } from "@/lib/email";
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
-    
+
     // Validate input
     if (!email || !password) {
       return NextResponse.json(
@@ -16,7 +15,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -25,7 +24,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     // Validate password length
     if (password.length < 8) {
       return NextResponse.json(
@@ -33,23 +32,23 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
-    
+
     if (existingUser) {
       return NextResponse.json(
         { error: "User with this email already exists" },
         { status: 409 }
       );
     }
-    
+
     // Hash password
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    
+
     // Create user
     const user = await prisma.user.create({
       data: {
@@ -57,11 +56,11 @@ export async function POST(req: NextRequest) {
         passwordHash: hashedPassword,
       },
     });
-    
+
     // Generate and store verification token
     const rawToken = generateToken();
     const hashedToken = hashToken(rawToken);
-    
+
     await prisma.verificationToken.create({
       data: {
         userId: user.id,
@@ -70,10 +69,10 @@ export async function POST(req: NextRequest) {
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
       },
     });
-    
+
     // Send verification email
     await sendVerificationEmail(user.email, rawToken);
-    
+
     return NextResponse.json(
       { message: "Check your email to verify your account" },
       { status: 201 }
@@ -86,4 +85,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-```

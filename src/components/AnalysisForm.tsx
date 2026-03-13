@@ -1,4 +1,3 @@
-```tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -25,7 +24,7 @@ export default function AnalysisForm({ onAnalysisComplete }: AnalysisFormProps) 
     // Read localStorage on mount
     const uses = localStorage.getItem("textlens_uses");
     const count = uses ? parseInt(uses, 10) || 0 : 0;
-    
+
     if (!session && count >= 5) {
       setShowGate(true);
     }
@@ -33,13 +32,13 @@ export default function AnalysisForm({ onAnalysisComplete }: AnalysisFormProps) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Check usage for guest users
     let count = 0;
     if (!session) {
       const uses = localStorage.getItem("textlens_uses");
       count = uses ? parseInt(uses, 10) || 0 : 0;
-      
+
       if (count >= 5) {
         setShowGate(true);
         return;
@@ -114,4 +113,3 @@ export default function AnalysisForm({ onAnalysisComplete }: AnalysisFormProps) 
     </div>
   );
 }
-```

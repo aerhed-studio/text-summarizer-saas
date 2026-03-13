@@ -1,4 +1,3 @@
-```ts
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -24,4 +23,3 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     html: `<p>Click <a href="${url}">here</a> to reset your password. Link expires in 1 hour.</p>`,
   });
 }
-```

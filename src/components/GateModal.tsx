@@ -1,4 +1,3 @@
-```tsx
 import {
   Dialog,
   DialogContent,
@@ -21,7 +20,7 @@ export default function GateModal({ open, onClose }: GateModalProps) {
         <DialogHeader>
           <DialogTitle>Free Analysis Limit Reached</DialogTitle>
           <DialogDescription>
-            You've used your 5 free analyses. Create a free account to continue.
+            You&apos;ve used your 5 free analyses. Create a free account to continue.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex flex-col sm:flex-row gap-2">
@@ -39,4 +38,3 @@ export default function GateModal({ open, onClose }: GateModalProps) {
     </Dialog>
   );
 }
-```

@@ -1,11 +1,11 @@
-```tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
-export default function Navbar() {
+// Fix B3: named export to match import { Navbar } used by consuming pages
+export function Navbar() {
   const { data: session } = useSession();
 
   return (
@@ -14,7 +14,7 @@ export default function Navbar() {
         <Link href="/" className="text-xl font-bold">
           TextLens
         </Link>
-        
+
         <div className="flex items-center space-x-4">
           {session ? (
             <>
@@ -22,11 +22,12 @@ export default function Navbar() {
               <Button variant="ghost" asChild>
                 <Link href="/dashboard">Dashboard</Link>
               </Button>
-              <Button variant="outline" asChild>
-                <Link href="/auth/login" onClick={(e) => {
-                  e.preventDefault();
-                  // This would be handled by NextAuth
-                }}>Sign Out</Link>
+              {/* Fix B2: call signOut() instead of swallowing the click */}
+              <Button
+                variant="outline"
+                onClick={() => signOut({ callbackUrl: "/" })}
+              >
+                Sign Out
               </Button>
             </>
           ) : (
@@ -44,4 +45,3 @@ export default function Navbar() {
     </nav>
   );
 }
-```

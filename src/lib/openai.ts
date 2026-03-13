@@ -1,4 +1,3 @@
-```ts
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -32,4 +31,3 @@ Return only valid JSON. No markdown. No explanation.`,
     keywords: Array.isArray(parsed.keywords) ? parsed.keywords.map(String) : [],
   };
 }
-```

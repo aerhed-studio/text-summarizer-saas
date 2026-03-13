@@ -1,4 +1,3 @@
-```ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
@@ -14,26 +13,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
         });
-        
+
         if (!user || !user.passwordHash) {
           return null;
         }
-        
+
         // 2. compare password hash
         const isValid = await bcrypt.compare(
           credentials.password as string,
           user.passwordHash
         );
-        
+
         if (!isValid) {
           return null;
         }
-        
+
         // 3. check emailVerified
         if (!user.emailVerified) {
           return null;
         }
-        
+
         // 4. return { id, email } or null
         return { id: user.id, email: user.email };
       },
@@ -54,4 +53,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: "/auth/login",
   },
 });
-```
