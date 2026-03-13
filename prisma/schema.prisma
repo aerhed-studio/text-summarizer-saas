@@ -1,0 +1,61 @@
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // required by Supabase connection pooling
+}
+
+model User {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email         String    @unique @db.VarChar(255)
+  passwordHash  String    @map("password_hash")
+  emailVerified Boolean   @default(false) @map("email_verified")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  analyses           Analysis[]
+  verificationTokens VerificationToken[]
+
+  @@map("users")
+}
+
+enum TokenType {
+  email_verification
+  password_reset
+}
+
+model VerificationToken {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  token     String    @unique
+  type      TokenType
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("verification_tokens")
+}
+
+model Analysis {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String?  @map("user_id") @db.Uuid
+  inputSnippet      String   @map("input_snippet")
+  inputLength       Int      @map("input_length")
+  summary           String
+  keywords          String[]
+  readabilityScore  Decimal  @map("readability_score") @db.Decimal(5, 2)
+  readabilityLabel  String   @map("readability_label") @db.VarChar(50)
+  modelUsed         String   @map("model_used") @db.VarChar(50)
+  processingMs      Int      @map("processing_ms")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("analyses")
+}
+```
